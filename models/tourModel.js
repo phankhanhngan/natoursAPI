@@ -195,12 +195,12 @@ tourSchema.post(/^find/, function (docs, next) {
 });
 
 //AGGREGATION MIDDLEWARE
-tourSchema.pre('aggregate', function (next) {
-  //pipeline is an array composed of many stages
-  //so use unshift to add another stage to the beginning
-  this._pipeline.unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   //pipeline is an array composed of many stages
+//   //so use unshift to add another stage to the beginning
+//   this._pipeline.unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 
 const Tour = mongoose.model('Tour', tourSchema);
 
