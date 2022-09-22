@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
@@ -12,16 +13,23 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const reviewRouter = require('./routes/reviewRoutes');
+const viewRouter = require('./routes/viewRoutes');
 const dotenv = require('dotenv');
 
 dotenv.config({ path: './config.env' });
+
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', path.join(__dirname, 'views'));
 
 //1) GLOBAL MIDDLEWARE
 
+//serving static fields
+app.use(express.static(path.join(__dirname, 'public')));
+
 // Set security HTTP headers
 app.use(helmet());
-
 
 //if in dev mode, log all the request, if not, don't log
 if (process.env.NODE_ENV === 'development') {
@@ -33,7 +41,7 @@ if (process.env.NODE_ENV === 'development') {
 const limiter = rateLimit({
   //max 100req from one ip/per hour
   max: 100,
-  windowMs: 60*60*1000,
+  windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour!'
 });
 //use this middleware on all /api routes
@@ -50,18 +58,18 @@ app.use(mongoSanitize());
 app.use(xss());
 
 //Prevent parameter pollution
-app.use(hpp({
-  whitelist: [
-    'duration',
-    'ratingsQuantity',
-    'ratingsAverage',
-    'maxGroupSize',
-    'difficulty',
-    'price'
-  ]
-}));
-
-app.use(express.static(`${__dirname}/public`));
+app.use(
+  hpp({
+    whitelist: [
+      'duration',
+      'ratingsQuantity',
+      'ratingsAverage',
+      'maxGroupSize',
+      'difficulty',
+      'price'
+    ]
+  })
+);
 
 // app.use((req, res, next) => {
 //   console.log('Hello from the middleware! 😍');
@@ -75,13 +83,14 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-//mounting the router
 
+//mounting the router
+app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 
-app.all('*', (req,res,next) => {
+app.all('*', (req, res, next) => {
   // const err = new Error(`Can't find ${req.originalUrl} on this server!`);
   // err.statusCode = 404;
   // err.status = 'fail';
