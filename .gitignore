@@ -6,7 +6,7 @@ yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
 node_modules
-.env
+config.env
 
 # Diagnostic reports (https://nodejs.org/api/report.html)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
@@ -71,7 +71,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+config.env
 .env.test
 
 # parcel-bundler cache (https://parceljs.org/)
