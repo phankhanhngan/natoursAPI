@@ -3,9 +3,11 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const cors = require('cors');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -27,9 +29,13 @@ app.set('views', path.join(__dirname, 'views'));
 
 //serving static fields
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'dist')));
 
 // Set security HTTP headers
 app.use(helmet());
+
+app.use(cors());
+app.options('*', cors());
 
 //if in dev mode, log all the request, if not, don't log
 if (process.env.NODE_ENV === 'development') {
@@ -49,6 +55,9 @@ app.use('/api', limiter);
 
 // body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
+//each req will then be parsed a cookie
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(cookieParser());
 
 // Data sanitize against NoSQL query injection
 //filter out $ and .
@@ -79,6 +88,7 @@ app.use(
 //Test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
+  console.log(req.cookies);
   next();
 });
 
