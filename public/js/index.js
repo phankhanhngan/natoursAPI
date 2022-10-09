@@ -43,7 +43,6 @@ if (updateDataForm) {
     form.append('name', document.getElementById('name').value);
     form.append('email', document.getElementById('email').value);
     form.append('photo', document.getElementById('photo').files[0]);
-    console.log(form);
     await updateSettings(form, 'data');
   });
 }
@@ -55,7 +54,7 @@ if (updatePasswordForm) {
     const passwordConfirm = document.getElementById('password-confirm').value;
     document.querySelector('.btn-save-password').textContent = 'Updating...';
     document.querySelector('.btn-save-password').enable = false;
-    console.log(passwordCurrent, password, passwordConfirm);
+
     e.preventDefault();
     await updateSettings(
       { passwordCurrent, password, passwordConfirm },

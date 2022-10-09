@@ -50,7 +50,7 @@ exports.signup = catchAsync(async (req, res, next) => {
   await newUser.save();
 
   const url = `${req.protocol}://${req.get('host')}/me`;
-  console.log(url);
+
   await new Email(newUser, url).sendWelcome();
 
   createSendToken(newUser, 201, res);
@@ -195,7 +195,6 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
     });
     //reset both password reset token and expires
   } catch (err) {
-    console.log(err);
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
     await user.save({ validateBeforeSave: false });
@@ -253,7 +252,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
   // 3) If so, update password
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
-  console.log(user.password, user.passwordConfirm);
+
   await user.save(); //user.findByIdAndUpdate not work!! (cuz validate and encrypt pass will not work)
 
   // 4) Log user in, send JWT

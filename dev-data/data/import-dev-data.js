@@ -15,7 +15,7 @@ const DB = process.env.DATABASE.replace(
 //return a promise can access to a connection obj
 mongoose
   .connect(DB, {
-    useNewUrlParser: true,
+    useNewUrlParser: true
   })
   .then(() => {
     console.log('DB connection successful!');
