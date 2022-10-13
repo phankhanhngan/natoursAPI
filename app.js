@@ -20,6 +20,7 @@ const bookingRouter = require('./routes/bookingRoutes');
 const viewRouter = require('./routes/viewRoutes');
 
 const dotenv = require('dotenv');
+const bookingController = require('./controllers/bookingController');
 
 dotenv.config({ path: './config.env' });
 
@@ -57,6 +58,13 @@ const limiter = rateLimit({
 });
 //use this middleware on all /api routes
 app.use('/api', limiter);
+
+//for req still be string not parse to json => put before express.json
+app.post(
+  '/webhook-checkout',
+  express.raw({ type: 'application/json' }),
+  bookingController.webhookCheckout
+);
 
 // body parser, reading data from body into req.body
 app.use(express.json({ limit: '10kb' }));
