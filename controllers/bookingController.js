@@ -3,6 +3,7 @@ const Tour = require('../models/tourModel');
 const Booking = require('../models/bookingModel');
 const catchAsync = require('../utils/catchAsync');
 const factory = require('../controllers/handlerFactory');
+const AppError = require('../utils/appError');
 const stripe = require('stripe');
 const User = require('../models/userModel');
 
