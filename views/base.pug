@@ -11,7 +11,7 @@ html
             link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:300,300i,700')
             //-meta(http-equiv="Content-Security-Policy" content="script-src http://api.mapbox.com 'self'; style-src 'self' 'unsafe-inline' api.mapbox.com fonts.googleapis.com;")
 
-    body
+    body(data-alert=`${alert ? alert : ''}`)
         // HEADER
         include _header
 
