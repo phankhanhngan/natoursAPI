@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 
-process.on('uncaughtException', err => {
+process.on('uncaughtException', (err) => {
   console.log(err.name, err.message);
   console.log('UNCAUGHT EXCEPTION. Shutting down...');
   process.exit(1);
@@ -19,18 +19,18 @@ const DB = process.env.DATABASE.replace(
 //return a promise can access to a connection obj
 mongoose
   .connect(DB, {
-  useNewUrlParser: true,
+    useNewUrlParser: true
   })
   .then(() => {
-  console.log('DB connection successful!');
-});
+    console.log('DB connection successful!');
+  });
 
 const port = process.env.PORT || 3000;
 const server = app.listen(port, () => {
   console.log(`App running on port ${port}...`);
 });
 
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   console.log(err.name, err.message);
   console.log('UNHANDLED REJECTION. Shutting down...');
   //shut down app only when the server has already closed. Because there are maybe
@@ -39,5 +39,11 @@ process.on('unhandledRejection', err => {
   server.close(() => {
     process.exit(1);
   });
-})
+});
 
+process.on('SIGTERM', () => {
+  console.log('SIGTERM received.Shutting down gracefully');
+  server.close(() => {
+    console.log('Process terminated!');
+  });
+});
