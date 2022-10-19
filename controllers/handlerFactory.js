@@ -13,7 +13,7 @@ exports.deleteOne = (Model) =>
 
     res.status(200).json({
       status: 'success',
-      data: null,
+      data: null
     });
   });
 
@@ -22,13 +22,13 @@ exports.updateOne = (Model) =>
     const doc = await Model.findByIdAndUpdate(
       req.params.id,
       {
-        $set: req.body,
+        $set: req.body
       },
       {
         new: true,
         overwrite: false,
         //run the maxlength minlength
-        runValidators: true,
+        runValidators: true
       }
     );
     if (!doc) {
@@ -39,8 +39,8 @@ exports.updateOne = (Model) =>
     res.status(200).json({
       status: 'success',
       data: {
-        data: doc,
-      },
+        data: doc
+      }
     });
   });
 
@@ -51,8 +51,8 @@ exports.createOne = (Model) =>
     res.status(201).json({
       status: 'success',
       data: {
-        data: doc,
-      },
+        data: doc
+      }
     });
   });
 
@@ -75,17 +75,21 @@ exports.getOne = (Model, popOptions) =>
       status: 'success',
       requestedAt: req.requestTime,
       data: {
-        data: doc,
-      },
+        data: doc
+      }
     });
   });
 
 exports.getAll = (Model, popOptions) =>
   catchAsync(async (req, res, next) => {
-    // to allow for nested GET reviews on tour (hack)
+    // to allow for nested GET reviews/bookings on tour (hack)
     let filter = {};
     if (req.params.tourId) {
       filter = { tour: req.params.tourId };
+    }
+
+    if (req.params.userId) {
+      filter = { user: req.params.userId };
     }
 
     // EXECUTE QUERY
@@ -96,15 +100,20 @@ exports.getAll = (Model, popOptions) =>
       .paginate();
     //before the query is executed, the pre('find') middleware is executed first
     // const docs = await features.query.explain();
-    const docs = await features.query;
 
+    // if (popOptions) {
+    //   features.query = features.query.populate(popOptions);
+    // }
+
+    const docs = await features.query;
+    console.log(docs);
     // SEND RESPONSE
     res.status(200).json({
       status: 'success',
       requestedAt: req.requestTime,
       results: docs.length,
       data: {
-        data: docs,
-      },
+        data: docs
+      }
     });
   });
