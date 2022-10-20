@@ -14,6 +14,7 @@ const logoutButton = document.querySelector('.nav__el--logout');
 const updateDataForm = document.querySelector('.form-user-data');
 const updatePasswordForm = document.querySelector('.form-user-password');
 const bookButton = document.getElementById('book-tour');
+const date = document.getElementById('selectedDate');
 
 // DELEGATION
 if (mapBox) {
@@ -72,7 +73,12 @@ if (bookButton) {
   bookButton.addEventListener('click', (e) => {
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
-    bookTour(tourId);
+    const day = date.value.split(',')[0].split('/')[0];
+    const month = date.value.split(',')[0].split('/')[1];
+    const year = date.value.split(',')[0].split('/')[2];
+    const d = { day, month, year };
+    console.log(d);
+    bookTour(tourId, d);
   });
 }
 

@@ -12,7 +12,6 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
   // 1) Get the currently booked tour
   const tour = await Tour.findById(req.params.tourID);
-
   // 2) Create checkout session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -24,6 +23,7 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
     mode: 'payment',
     customer_email: req.user.email,
     client_reference_id: req.params.tourID,
+    metadata: { selectedDate: req.params.selectedDate },
     line_items: [
       {
         price_data: {
@@ -43,7 +43,6 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
       }
     ]
   });
-
   // 3) Create session as response
   res.status(200).json({
     status: 'success',
@@ -64,12 +63,17 @@ const createBookingCheckout = async (session) => {
   const tour = session.client_reference_id;
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.amount_total / 100;
-  await Booking.create({ tour, user, price });
+  console.log(session);
+  const selectedDate = session.metadata.selectedDate;
+  console.log(selectedDate);
+  await Booking.create({ tour, user, price, selectedDate });
 };
 
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
+  console.log(event.type);
+  console.log(req.body);
   try {
     event = stripe.webhooks.constructEvent(
       req.body,
@@ -81,6 +85,7 @@ exports.webhookCheckout = (req, res, next) => {
   }
 
   if (event.type === 'checkout.session.completed') {
+    console.log(event.data.object);
     createBookingCheckout(event.data.object);
   }
 

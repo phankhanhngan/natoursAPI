@@ -60,6 +60,7 @@ const limiter = rateLimit({
 app.use('/api', limiter);
 
 //for req still be string not parse to json => put before express.json
+//???? sao de o day z
 app.post(
   '/webhook-checkout',
   express.raw({ type: 'application/json' }),
