@@ -12,12 +12,15 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
   // 1) Get the currently booked tour
   const tour = await Tour.findById(req.params.tourID);
+  // const url = `${req.protocol}://${req.get('host')}/my-tours?tour=${
+  //   tour._id
+  // }&user=${req.user.id}&price=${tour.price}&selectedDate=${
+  //   req.params.selectedDate
+  // }`;
   // 2) Create checkout session
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
-    // success_url: `${req.protocol}://${req.get('host')}/?tour=${
-    //   req.params.tourID
-    // }&user=${req.user.id}&price=${tour.price}`,
+    // success_url: url,
     success_url: `${req.protocol}://${req.get('host')}/my-tours?alert=booking`,
     cancel_url: `${req.protocol}://${req.get('host')}/tour/${tour.slug}`,
     mode: 'payment',
@@ -53,9 +56,11 @@ exports.getCheckoutSession = catchAsync(async (req, res, next) => {
 
 // exports.createBookingCheckout = catchAsync(async (req, res, next) => {
 //   // This is only TEMPORARY, because it's UNSECURE: everyone can make bookings without paying
-//   const { tour, user, price } = req.query;
-//   if (!tour && !user && !price) return next();
-//   await Booking.create({ tour, user, price });
+//   let { tour, user, price, selectedDate } = req.query;
+//   if (!tour && !user && !price && !selectedDate) return next();
+//   selectedDate = new Date(selectedDate.replaceAll('-', ' '));
+//   console.log('date:', selectedDate);
+//   await Booking.create({ tour, user, price, selectedDate });
 //
 //   res.redirect(req.originalUrl.split('?')[0]);
 // });
@@ -65,7 +70,9 @@ const createBookingCheckout = async (session) => {
   const user = (await User.findOne({ email: session.customer_email })).id;
   const price = session.amount_total / 100;
   console.log(session);
-  const selectedDate = session.metadata.selectedDate;
+  let selectedDate = session.metadata.selectedDate;
+  if (!tour && !user && !price && !selectedDate) return next();
+  selectedDate = new Date(selectedDate.replaceAll('-', ' '));
   console.log(selectedDate);
   await Booking.create({ tour, user, price, selectedDate });
 };
@@ -73,7 +80,6 @@ const createBookingCheckout = async (session) => {
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers['stripe-signature'];
   let event;
-  console.log(event.type);
   console.log(req.body);
   try {
     event = stripe.webhooks.constructEvent(

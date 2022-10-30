@@ -75,8 +75,8 @@ const tourSchema = new mongoose.Schema(
       default: Date.now(),
       select: false
     },
-    startDates: [Date],
-    // startDates: [{ date: Date, participants: Number, soldOut: Boolean }],
+    // startDates: [Date],
+    startDates: [{ date: Date, participants: Number, soldOut: Boolean }],
     secretTour: {
       type: Boolean,
       default: false
@@ -186,6 +186,15 @@ tourSchema.pre(/^find/, function (next) {
     select: '-__v -passwordChangedAt'
   });
 
+  next();
+});
+
+tourSchema.pre('save', async function (next) {
+  this.startDates.forEach((el) => {
+    if (el.participants === this.maxGroupSize) {
+      el.soldOut = true;
+    }
+  });
   next();
 });
 

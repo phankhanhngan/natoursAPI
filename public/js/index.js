@@ -73,12 +73,7 @@ if (bookButton) {
   bookButton.addEventListener('click', (e) => {
     e.target.textContent = 'Processing...';
     const { tourId } = e.target.dataset;
-    const day = date.value.split(',')[0].split('/')[0];
-    const month = date.value.split(',')[0].split('/')[1];
-    const year = date.value.split(',')[0].split('/')[2];
-    const d = { day, month, year };
-    console.log(d);
-    bookTour(tourId, d);
+    bookTour(tourId, date.value);
   });
 }
 
