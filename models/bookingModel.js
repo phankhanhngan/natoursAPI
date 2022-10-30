@@ -55,7 +55,7 @@ bookingSchema.pre('save', async function (next) {
     }
   }
   if (startDate.soldOut) {
-    next(
+    return next(
       new AppError(
         'Tour starts at this date has been already sold out! Please choose another date!',
         400
