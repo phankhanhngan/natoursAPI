@@ -24,7 +24,17 @@ block content
                         .card__data
                             svg.card__icon
                                 use(xlink:href='/img/icons.svg#icon-calendar')
-                            span=tour.startDates[0].toLocaleString('en-us',{month: 'long', year: 'numeric'})
+                            - const date = () => {
+                            - let min = new Date().getTime() - tour.startDates[0].date.getTime();
+                            - let minDate = tour.startDates[0].date;
+                            - tour.startDates.forEach((el) => {
+                            - if (new Date().getTime() - el.date.getTime() < min) {
+                            - min = new Date().getTime() - el.date.getTime();
+                            - minDate = el.date;
+                            - }
+                            - });
+                            - return minDate;};
+                            span=`${date().toLocaleString('en-us',{month: 'long', year: 'numeric'})}`
                         .card__data
                             svg.card__icon
                                 use(xlink:href='/img/icons.svg#icon-flag')

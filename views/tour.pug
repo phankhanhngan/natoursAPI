@@ -43,8 +43,17 @@ block content
             div
                 .overview-box__group
                     h2.heading-secondary.ma-bt-lg Quick facts
-                    - const date = tour.startDates[0].toLocaleString('en-us',{month: 'long', year: 'numeric'});
-                    +overviewBox('Next date', date, 'calendar')
+                    - const date = () => {
+                    - let min = new Date().getTime() - tour.startDates[0].date.getTime();
+                    - let minDate = tour.startDates[0].date;
+                    - tour.startDates.forEach((el) => {
+                    - if (new Date().getTime() - el.date.getTime() < min) {
+                    - min = new Date().getTime() - el.date.getTime();
+                    - minDate = el.date;
+                    - }
+                    - });
+                    - return minDate;};
+                    +overviewBox('Next date', date().toLocaleString('en-us',{month: 'long', year: 'numeric'}), 'calendar')
                     +overviewBox('Difficulty', tour.difficulty, 'trending-up')
                     +overviewBox('Participants', `${tour.maxGroupSize} people`, 'user')
                     +overviewBox('Rating', `${tour.ratingsAverage} / 5`, 'star')
@@ -92,9 +101,13 @@ block content
                 p.cta__text=`${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
                 select.cta__select(name='selectedDate')#selectedDate
                     each startDate in tour.startDates
-                        //option(value=`${startDate.date.toLocaleString()}`)=startDate.date.toLocaleString()
-                        option(value=`${startDate.date}`)=startDate.date
+                        if startDate.date.getTime() < new Date().getTime()
+                            option(value=`${startDate.date}` disabled=`disabled`)=`${startDate.date.toLocaleString('en-us', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})} (Past tour)`
+                        else if startDate.soldOut
+                            option(value=`${startDate.date}` disabled=`disabled`)=`${startDate.date.toLocaleString('en-us', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})} (Sold out)`
+                        else
+                            option(value=`${startDate.date}`)=`${startDate.date.toLocaleString('en-us', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
                 if user
-                    button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+                  button.btn.btn--green#book-tour(data-tour-id=`${tour.id}`) Book tour now!
                 else
                     a.btn.btn--green.span-all-rows(href='/login') Login to book tour!

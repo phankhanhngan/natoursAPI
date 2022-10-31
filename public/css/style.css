@@ -755,6 +755,19 @@ body {
   font-weight: 400;
 }
 
+.cta__select {
+  padding: 0.4rem 1rem;
+  border-radius: 10rem;
+  text-transform: uppercase;
+  display: inline-block;
+  text-decoration: none;
+  position: relative;
+  transition: all 0.4s;
+  font-weight: 400;
+  backface-visibility: hidden;
+  border: none;
+}
+
 .user-view {
   background-color: #fff;
   max-width: 120rem;
