@@ -3,6 +3,7 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
+const Review = require('../models/reviewModel');
 
 exports.alerts = (req, res, next) => {
   const { alert } = req.query;
@@ -47,13 +48,25 @@ exports.getTour = catchAsync(async (req, res, next) => {
     fields: 'review rating user'
   });
   // 2) Build template
+
   if (!tour) {
     return next(new AppError('There is no tour with that name!', 404));
   }
+
+  const bookedTour = await Booking.find({
+    tour: tour.id,
+    user: req.user.id
+  });
+
+  const reviewedTour = await Review.find({ tour: tour.id, user: req.user.id });
+
+  console.log(bookedTour, reviewedTour);
   // 3) Render template using data from 1)
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
-    tour
+    tour,
+    bookedTour,
+    reviewedTour
   });
 });
 
@@ -68,6 +81,14 @@ exports.getSignupForm = (req, res) => {
     title: 'Sign up for an account'
   });
 };
+
+exports.getReviewForm = catchAsync(async (req, res) => {
+  const tour = await Tour.findById(req.params.tourId);
+  res.status(200).render('review', {
+    title: 'Review',
+    tour
+  });
+});
 
 exports.getAccount = (req, res) => {
   res.status(200).render('account', {

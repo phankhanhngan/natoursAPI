@@ -146,6 +146,7 @@ exports.isLoggedIn = catchAsync(async (req, res, next) => {
       //send current user to template
       res.locals.user = currentUser;
       //Grant access to protected route
+      req.user = currentUser;
       return next();
     } catch (err) {
       return next();

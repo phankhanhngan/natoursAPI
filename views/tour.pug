@@ -99,15 +99,23 @@ block content
             .cta__content
                 h2.heading-secondary What are you waiting for?
                 p.cta__text=`${tour.duration} days. 1 adventure. Infinite memories. Make it yours today!`
-                select.cta__select(name='selectedDate')#selectedDate
-                    each startDate in tour.startDates
-                        if startDate.date.getTime() < new Date().getTime()
-                            option(value=`${startDate.date}` disabled=`disabled`)=`${startDate.date.toLocaleString('en-us', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})} (Past tour)`
-                        else if startDate.soldOut
-                            option(value=`${startDate.date}` disabled=`disabled`)=`${startDate.date.toLocaleString('en-us', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})} (Sold out)`
-                        else
-                            option(value=`${startDate.date}`)=`${startDate.date.toLocaleString('en-us', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
-                if user
-                  button.btn.btn--green#book-tour(data-tour-id=`${tour.id}`) Book tour now!
-                else
+
+                if user && bookedTour.length !== 0 && reviewedTour.length === 0
+                    a.btn.btn--green(href=`/review/${tour.id}`) Review tour now!
+
+                if user && bookedTour.length === 0
+                    select.cta__select(name='selectedDate')#selectedDate
+                      each startDate in tour.startDates
+                          if startDate.date.getTime() < new Date().getTime()
+                              option(value=`${startDate.date}` disabled=`disabled`)=`${startDate.date.toLocaleString('en-us', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})} (Past tour)`
+                          else if startDate.soldOut
+                              option(value=`${startDate.date}` disabled=`disabled`)=`${startDate.date.toLocaleString('en-us', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})} (Sold out)`
+                          else
+                              option(value=`${startDate.date}`)=`${startDate.date.toLocaleString('en-us', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}`
+                    button.btn.btn--green#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+
+                if user && bookedTour.length !==  0 && reviewedTour.length !== 0
+                    p.cta__text Thank you for enjoying the tour!
+
+                if !user
                     a.btn.btn--green.span-all-rows(href='/login') Login to book tour!

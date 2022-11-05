@@ -3,6 +3,7 @@ import { login, logout, signup } from './login';
 import { displayMap } from './mapbox';
 import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
+import { reviewTour } from './reviewTour';
 import { showAlert } from './alerts';
 
 // this file get data from user interface and delegate the action
@@ -11,12 +12,14 @@ import { showAlert } from './alerts';
 const mapBox = document.getElementById('map');
 const loginForm = document.querySelector('.form--login');
 const signupForm = document.querySelector('.form--signup');
+const reviewForm = document.querySelector('.form--review');
 const logoutButton = document.querySelector('.nav__el--logout');
 const updateDataForm = document.querySelector('.form-user-data');
 const updatePasswordForm = document.querySelector('.form-user-password');
 const bookButton = document.getElementById('book-tour');
 const signupButton = document.getElementById('signup-button');
 const loginButton = document.getElementById('login-button');
+const submitReviewButton = document.getElementById('submit-review-button');
 const date = document.getElementById('selectedDate');
 
 // DELEGATION
@@ -98,6 +101,19 @@ if (signupButton) {
         e.preventDefault();
         signup(name, email, password, passwordConfirm);
       });
+    }
+  });
+}
+
+if (submitReviewButton) {
+  submitReviewButton.addEventListener('click', (e) => {
+    e.target.textContent = 'Submitting...';
+    if (reviewForm) {
+      const { tourId } = e.target.dataset;
+      const review = document.getElementById('review').value;
+      const rating = document.getElementById('rating').value;
+      e.preventDefault();
+      reviewTour(tourId, review, rating);
     }
   });
 }

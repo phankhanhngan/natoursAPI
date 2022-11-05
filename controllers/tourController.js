@@ -82,18 +82,6 @@ exports.updateTour = factory.updateOne(Tour);
 
 exports.deleteTour = factory.deleteOne(Tour);
 
-const date = () => {
-  let min = new Date().getTime() - tour.startDates[0].date.getTime();
-  let minDate = tour.startDates[0].date;
-  tour.startDates.forEach((el) => {
-    if (new Date().getTime() - el.date.getTime() < min) {
-      min = new Date().getTime() - el.date.getTime();
-      minDate = el.date;
-    }
-  });
-  return minDate;
-};
-
 // exports.deleteTour = catchAsync(async (req, res, next) => {
 //   const tour = await Tour.findByIdAndDelete(req.params.id);
 //

@@ -1,0 +1,36 @@
+extends base
+
+block content
+    section.section-header
+        .header__hero
+            .header__hero-overlay &nbsp;
+            img.header__hero-img(src=`/img/tours/${tour.imageCover}`, alt=`${tour.name}`)
+        .heading-box
+            h1.heading-primary
+                span=`${tour.name} tour`
+            .heading-box__group
+                .heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href=`/img/icons.svg#icon-clock`)
+                    span.heading-box__text=`${tour.duration}`
+                .heading-box__detail
+                    svg.heading-box__icon
+                        use(xlink:href='/img/icons.svg#icon-map-pin')
+                    span.heading-box__text=`${tour.startLocation.description}`
+    section.section-description-review
+        .overview-box
+            div
+                .review-form
+                    form.form.form--review
+                        .form__group
+                            label.h2.heading-secondary.ma-bt-lg(for='review') Review
+                            input#review.form__input(type='text', placeholder='Write your review here...', required)
+                        .form__group
+                            select.cta__select(name='rating')#rating
+                                option(value='1') 1
+                                option(value='2') 2
+                                option(value='3') 3
+                                option(value='4') 4
+                                option(value='5') 5
+                        .form__group
+                            button.btn.btn--green#submit-review-button(data-tour-id=`${tour.id}`) Submit Review

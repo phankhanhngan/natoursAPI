@@ -18,6 +18,12 @@ router.get('/signup', authController.isLoggedIn, viewController.getSignupForm);
 router.get('/me', authController.protect, viewController.getAccount);
 
 router.get(
+  '/review/:tourId',
+  authController.protect,
+  viewController.getReviewForm
+);
+
+router.get(
   '/my-tours',
   // bookingController.createBookingCheckout,
   authController.protect,

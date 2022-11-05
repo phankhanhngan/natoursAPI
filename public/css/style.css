@@ -186,6 +186,7 @@ body {
 .btn,
 .btn:link,
 .btn:visited {
+  text-align: center;
   font-size: 1.6rem;
   padding: 1.4rem 3rem;
   border-radius: 10rem;
@@ -432,6 +433,14 @@ body {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+}
+.section-description-review {
+  background-color: #fcfcfc;
+  margin-top: calc(0px - var(--section-rotate));
+}
+.section-description-review > * {
+  padding-top: 14vw;
+  padding-bottom: calc(1vw + var(--section-rotate));
 }
 .section-description > * {
   padding: 0 8vw;
@@ -1241,6 +1250,13 @@ body {
   -webkit-box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
   box-shadow: 0 2.5rem 8rem 2rem rgba(0, 0, 0, 0.06);
   padding: 5rem 7rem;
+  border-radius: 5px;
+}
+
+.review-form {
+  margin: 0 auto;
+  max-width: 100rem;
+  /*padding: 5rem 7rem;*/
   border-radius: 5px;
 }
 
