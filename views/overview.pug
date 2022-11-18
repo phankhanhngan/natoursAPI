@@ -52,3 +52,18 @@ block content
                             span.card__footer-value=tour.ratingsAverage
                             span.card__footer-text=` rating (${tour.ratingsQuantity})`
                         a.btn.btn--green.btn--small(href=`/tour/${tour.slug}`) Details
+                        div.like
+                            - if(user) {
+                            button.like-button(data-tourid=`${tour._id}`).btn.like__btn
+                                -if (tour.favoriteBy.indexOf(user._id)  !== -1) {
+                                span.like__text.like__text--active=`${tour.favoriteBy.length}`
+                                svg.like__icon.like__icon--active
+                                    use(xlink:href='/img/icons.svg#icon-heart')
+                                -} else {
+                                span.like__text=`${tour.favoriteBy.length}`
+                                svg.like__icon
+                                    use(xlink:href='/img/icons.svg#icon-heart')
+                                -}
+                            -} else {
+                            span.like--span=`${tour.favoriteBy.length} Users have liked this tour!`
+                            -}

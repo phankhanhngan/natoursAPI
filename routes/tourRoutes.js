@@ -3,6 +3,7 @@ const tourController = require('../controllers/tourController');
 const authController = require('../controllers/authController');
 const reviewRouter = require('../routes/reviewRoutes');
 const bookingRouter = require('../routes/bookingRoutes');
+const bridgeController = require('../controllers/bridgeController');
 
 const router = express.Router();
 
@@ -33,6 +34,14 @@ router.route('/tour-stats').get(tourController.getTourStats);
 router
   .route('/top-5-cheap')
   .get(tourController.aliasTopCheap, tourController.getAllTour);
+
+router
+  .route('/:id/likeTour')
+  .patch(
+    authController.protect,
+    authController.restrictTo('user'),
+    bridgeController.likeTour
+  );
 
 router
   .route('/')

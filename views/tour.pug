@@ -76,6 +76,11 @@ block content
             - const paragraphs = tour.description.split('\n')
             each p in paragraphs
               p.description__text=p
+            div.like
+                button.btn.like__btn#like-button(data-tour-id=`${tour.id}`)
+                    span.like__text= 12
+                    svg.like__icon
+                        use(xlink:href='/img/icons.svg#icon-heart')
 
     section.section-pictures
         each img, i in tour.images

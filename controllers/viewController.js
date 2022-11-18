@@ -48,19 +48,22 @@ exports.getTour = catchAsync(async (req, res, next) => {
     fields: 'review rating user'
   });
   // 2) Build template
-
   if (!tour) {
     return next(new AppError('There is no tour with that name!', 404));
   }
+  let bookedTour, reviewedTour;
 
-  const bookedTour = await Booking.find({
-    tour: tour.id,
-    user: req.user.id
-  });
+  if (req.user) {
+    bookedTour = await Booking.find({
+      tour: tour.id,
+      user: req.user.id
+    });
+    reviewedTour = await Review.find({ tour: tour.id, user: req.user.id });
+  } else {
+    bookedTour = null;
+    reviewedTour = null;
+  }
 
-  const reviewedTour = await Review.find({ tour: tour.id, user: req.user.id });
-
-  console.log(bookedTour, reviewedTour);
   // 3) Render template using data from 1)
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,

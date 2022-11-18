@@ -5,6 +5,7 @@ import { updateSettings } from './updateSettings';
 import { bookTour } from './stripe';
 import { reviewTour } from './reviewTour';
 import { showAlert } from './alerts';
+import { likeTour } from './likeTour';
 
 // this file get data from user interface and delegate the action
 
@@ -21,6 +22,9 @@ const signupButton = document.getElementById('signup-button');
 const loginButton = document.getElementById('login-button');
 const submitReviewButton = document.getElementById('submit-review-button');
 const date = document.getElementById('selectedDate');
+const likeButton = document.querySelectorAll('.like-button');
+const likeText = document.querySelectorAll('.like__text');
+const likeIcon = document.querySelectorAll('.like__icon');
 
 // DELEGATION
 if (mapBox) {
@@ -115,6 +119,31 @@ if (submitReviewButton) {
       e.preventDefault();
       reviewTour(tourId, review, rating);
     }
+  });
+}
+
+if (likeButton) {
+  likeButton.forEach((el, index) => {
+    el.addEventListener('click', (e) => {
+      const { tourid } = e.target.dataset;
+      likeTour(tourid).then((r) => {
+        if (r === 'like') {
+          likeText[index].textContent = (
+            Number(likeText[index].textContent) + 1
+          ).toString();
+          likeIcon[index].classList.add('like__icon--active');
+          likeText[index].classList.add('like__text--active');
+        } else if (r === 'unlike') {
+          likeText[index].textContent = (
+            Number(likeText[index].textContent) - 1
+          ).toString();
+          likeIcon[index].classList.remove('like__icon--active');
+          likeText[index].classList.remove('like__text--active');
+        } else {
+          showAlert('error', 'Error');
+        }
+      });
+    });
   });
 }
 

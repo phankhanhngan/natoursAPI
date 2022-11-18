@@ -1194,6 +1194,31 @@ body {
   grid-row-gap: 1rem;
   margin-top: auto;
 }
+.like {
+  justify-self: end;
+  position: relative;
+  font-size: 2.5rem;
+  color: #fff;
+  cursor: pointer;
+  z-index: 10;
+  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
+}
+.like__icon {
+  width: 20px;
+  height: 10px;
+}
+.like__icon--active {
+  width: 20px;
+  height: 10px;
+  fill: #ef5959;
+}
+.like__text {
+  color: #000;
+}
+.like__text--active {
+  color: #ef5959;
+}
 .card__footer-value {
   font-weight: 700;
 }
@@ -1205,12 +1230,25 @@ body {
 }
 .card .btn-small,
 .card .btn {
-  grid-row: 1 / 3;
+  /*grid-row: 1 / 3;*/
   justify-self: end;
   -ms-flex-item-align: center;
   align-self: center;
 }
-
+.like__btn {
+  grid-row: 3/3!important;
+  background-color: #fbfbfb;
+  box-shadow: 6px 5px 9px #ddd;
+}
+.like__btn--active {
+  box-shadow: 6px 5px 9px #ddd, inset -4px -3px 0px rgb(255 255 255 / 50%), inset 4px 3px 3px #43434333;
+  background-color: #fbfbfb;
+}
+.like--span{
+  font-size: 14px;
+  color: #3a9b57;
+  font-weight: 600 ;
+}
 .error {
   position: absolute;
   top: 35%;
